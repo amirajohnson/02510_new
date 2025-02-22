@@ -40,7 +40,30 @@ def size_factor(raw_counts):
     """Find the normalized counts for raw_counts
     Returns: a matrix of same size as raw_counts
     """
-    pass
+    num_genes = len(raw_counts)
+    num_samples = len(raw_counts[0])
+    res = [[0] * num_samples for _ in range(num_genes)]
+
+    for sample in range(num_samples):
+        k_vals = []
+        for gene in range(num_genes):
+            #calculate the ratios for each gene/sample pair
+            observed_counts = raw_counts[gene][sample]
+            product = np.prod(raw_counts[gene])
+            geom_mean = product ** (1/num_samples)
+            final_val = observed_counts / geom_mean
+            k_vals.append(final_val)
+        
+        #get the size factor for each sample
+        size_factor = np.median(k_vals) 
+
+        #normalize the genes
+        for gene in range(num_genes):
+            observed_counts = raw_counts[gene][sample]
+            res[gene][sample] = observed_counts / size_factor
+
+    return res
+
     
 
 if __name__=="__main__":
