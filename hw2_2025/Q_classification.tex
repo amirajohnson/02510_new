@@ -1,0 +1,62 @@
+{\bf [30 points] Cell type classification}\\
+While cells from the same individual share (roughly) the same DNA
+sequence, different cells use different subsets of these genes,
+and at different levels. Single-cell RNA sequencing (scRNA-seq) measures the
+activity levels of a set of annotated genes in a single cell, a vector with continues
+values that is termed ‘gene expression profile’. The type of a cell (e.g., lung cell,
+brain cell, skin epidermis) is closely connected with its gene expression profile.
+
+In this problem you will use a combination of unsupervised and supervised learning techniques to explore and classify cells from a large single-cell RNA sequencing (scRNA-seq) dataset. This is an important goal. For example, when taking a cancer biopsy the sample contains several different
+types of cells and the ability to accurately determine the cell composition can
+have important impact on the type of treatment prescribed. 
+
+\textbf{Data Description}
+We will implement several learning algorithms in Python and test them on an RNA-seq dataset. All the required data is in the \texttt{dataset/} folder. The two files \texttt{train\_gene\_expression.npz} and \texttt{test\_gene\_expression.npz} are sparse SciPy/Numpy-formatted gene expression matrices. Each row of the matrix is a cell, with its expression value for each gene in a separate column; there are a total of $22289$ genes (columns) in each matrix. In addition, the two files \texttt{train\_labels.npy} and \texttt{test\_labels.npy} contain cell types labels for each row in the training and testing datasets, respectively; there are a total of five cell types present in both the train and test data.
+
+\textbf{Before starting:} make sure you have Numpy, Matplotlib, Pandas, Seaborn, SciPy, SciKit Learn and PyTorch (the CPU version is sufficient) installed on your machine. If you have trouble installing these packages, please come to office hours for help.
+
+\textbf{Your task:}
+
+\fbox{\parbox{0.9\textwidth}{
+\textbf{Note: }{Your code is graded by an autograder. You have been given a skeleton code clustering.py. You have to complete 3 functions (\texttt{reduce\_dimensionality\_pca}, \texttt{plot\_transformed\_cells}, and \texttt{train\_and\_evaluate\_rf\_classifier}). The details about the functions are given later.  At the end, the script should be able to run with command line:\\
+
+\texttt{python classification.py dataset/train\_gene\_expression.npz \textbackslash \\ dataset/test\_gene\_expression.npz dataset/train\_labels.npy \textbackslash\\
+dataset/test\_labels.npy "rf\_pipeline"\\
+}
+
+The formats of arguments and return values of each function are explicitly described in the skeleton code. For the hyperparameters, please use the 
+\textbf{default} values specified in the skeleton code. 
+}
+}
+}
+
+\begin{enumerate}
+\item (10 points) Not all genes are useful for cell type classification. To save time and improve accuracy we can cluster using only a subset of the genes. One common criteria to select genes is dispersion, which is defined as the variance divided by mean. The $\texttt{get\_top\_gene\_filter}$ function is to compute a mask that selects only the columns of the expression matrix that are the top 2000 most dispersed across all cells in the training dataset.
+
+
+As another preprocessing step, we will use Principal Component Analysis (PCA) to reduce the dimensionality of the filtered genes. PCA is an unsupervised learning technique that computes linear combinations of features that best capture the axes of variance in the high-dimensional feature space. \textbf{Complete} the function \texttt{reduce\_dimensionality\_pca}, which performs PCA on the filtered expression data and returns the transformed training data and test data. Please use the SciKit Learn implementation of PCA (see documentation \href{https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html}{here}).
+\\\\
+(\textbf{Hint:} for best results, concatenate the filtered training and expression data together and input the combined data for training the PCA model.)
+
+\item (10 points) 
+To visualize the appropriateness of PCA embedding for the cell classification task, we can plot our cells in the 2D plane spanned by the top 2 principal components. \textbf{Complete} the \texttt{plot\_transformed\_cells} function, which takes as input the transformed gene expression data and plots the cells using only the first two principal components represented in the transformed data. Your plot should color the cells by their cell type label. Apply the completed function to the PCA-transformed \textit{training} gene expression data, and \textbf{attach an image} of your plot below. \textbf{Comment} on how clear the difference between cell types is in your plot.
+\\\\
+(\textbf{Hint:} consider using Pandas + Seaborn for plotting and labeling.)
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+
+
+
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+\item (10 points) Next, we will implement a pipeline that uses a Random Forest classifier to classify our cells. The Random forests algorithm is an ensemble learning method that operates by constructing a multitude of decision trees at training time.
+ \textbf{Complete} the \texttt{train\_and\_evaluate\_rf\_classifier} function, which trains a simple Random forests pipeline on the PCA-reduced gene expressions and returns the trained model as well as the classification accuracy on the test data. Please use the SciKit Learn implementation of the Random forests classifier (see documentation \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}{here} and \href{https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html}{here}).
+
+ Last, we will combine the above functions to generate a pipeline for cell-type classification. The (\texttt{mode ==\textbf{"rf\_pipeline"}}) branch within the \texttt{\_\_main\_\_} method of the Python script has been provided for you, which combines the gene filtration, PCA dimensionality reduction and Random forests classification steps and prints the final score of your classifier. \textbf{Report} the training and test accuracy of your classifier below.
+
+\begin{solution}
+
+\end{solution}
+\end{enumerate}
