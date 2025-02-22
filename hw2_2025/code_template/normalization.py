@@ -19,18 +19,16 @@ def rpkm(raw_counts, gene_lengths):
     Returns: a matrix of same size as raw_counts
     """
     gene_count = len(raw_counts)
-    assert(gene_count == len(gene_lengths))
     samples_count = len(raw_counts[0])
+    total_reads = np.sum(raw_counts, axis = 0)
 
     res = [[0] * samples_count for _ in range(gene_count)]
-    assert(len(res) == gene_count)
-    assert(len(res[0]) == samples_count)
     for gene in range(len(raw_counts)):
-        total_reads = np.sum(raw_counts[gene]) #M
         gene_length = gene_lengths[gene] #L(G)
         for sample in range(samples_count): 
             num_reads = raw_counts[gene][sample] #R(G)
-            res[gene][sample] = (num_reads / gene_length) * ((10**9)/total_reads)
+            total_reads_samp = total_reads[sample] #N
+            res[gene][sample] = (num_reads / gene_length) * ((10**9)/total_reads_samp)
     return res
 
 
