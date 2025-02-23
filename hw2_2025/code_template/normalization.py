@@ -126,8 +126,11 @@ if __name__=="__main__":
 
     size_factor1=size_factor(raw_counts)
     with open("size_factor_normalized_counts.txt", "w") as f:
-        for row in size_factor1:
-            f.write("\t".join(map(str, row)) + "\n")
+        for i, row in enumerate(size_factor1):
+            if i < len(size_factor1) - 1:
+                f.write("\t".join(map(str, row)) + "\n")
+            else:
+                f.write("\t".join(map(str, row))) 
     print("done")
         
     # plot_boxplots(raw_counts, gene_lengths, output_dir='outputs')
