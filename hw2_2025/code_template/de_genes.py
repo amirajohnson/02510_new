@@ -65,17 +65,19 @@ def bh(gene_names, pvals, alpha):
     sorted_pvals = pvals[sorted_indices]
     sorted_gene_names = gene_names[sorted_indices]
     n = len(pvals)
-    final_k = 0
+    final_k = -1
     significant_genes = []
 
     print(sorted_pvals)
     for i in range(len(pvals)):
         print(sorted_gene_names[i], sorted_pvals[i], (i+1)/n * alpha)
         if sorted_pvals[i] <= (i+1)/n * alpha:
-            significant_genes.append(sorted_gene_names[i])
-
-    print(significant_genes)
-    return significant_genes
+            final_k = i
+    
+    if final_k != -1:
+        significant_genes = sorted_gene_names[:final_k+1]
+        return significant_genes.tolist()
+    else: return []
 
 
 
@@ -179,8 +181,8 @@ if __name__=="__main__":
     # print(bh(genes, input1, 0.05))
 
     genes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    input = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-    alpha = 0.1
+    input = [0.001, 0.001, 0.01,  0.04, 0.1, 0.1, 0.1, 0.5]
+    alpha = 0.001
     print(bh(genes, input, alpha))
 
     # data = np.loadtxt("size_factor_normalized_counts.txt", delimiter="\t", dtype = float)
