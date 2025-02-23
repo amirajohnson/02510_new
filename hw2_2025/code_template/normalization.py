@@ -67,55 +67,6 @@ def size_factor(raw_counts):
 
 # Assuming the functions `rpkm` and `size_factor` have been defined already
 
-import os
-
-def plot_boxplots(raw_counts, gene_lengths, output_dir='outputs'):
-    # Normalize the data using RPKM and Size Factor
-    rpkm_counts = rpkm(raw_counts, gene_lengths)
-    size_factor_counts = size_factor(raw_counts)
-    
-    # Log2 transformation (add a small constant to avoid log(0))
-    raw_counts_log2 = np.log2(np.array(raw_counts) + 1)  # +1 to avoid log(0)
-    rpkm_counts_log2 = np.log2(np.array(rpkm_counts) + 1)  # +1 to avoid log(0)
-    size_factor_counts_log2 = np.log2(np.array(size_factor_counts) + 1)  # +1 to avoid log(0)
-    
-    # Create a figure for the boxplots
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))  # 1 row, 3 columns for each dataset
-    
-    # Plot raw counts
-    axes[0].boxplot(raw_counts_log2.T)  # Transpose so that each sample is a box
-    axes[0].set_title('Log2 Raw Counts')
-    axes[0].set_xlabel('Samples')
-    axes[0].set_ylabel('Log2 Count')
-
-    # Plot RPKM Normalized counts
-    axes[1].boxplot(rpkm_counts_log2.T)  # Transpose so that each sample is a box
-    axes[1].set_title('Log2 RPKM Normalized Counts')
-    axes[1].set_xlabel('Samples')
-    axes[1].set_ylabel('Log2 Count')
-
-    # Plot Size Factor Normalized counts
-    axes[2].boxplot(size_factor_counts_log2.T)  # Transpose so that each sample is a box
-    axes[2].set_title('Log2 Size Factor Normalized Counts')
-    axes[2].set_xlabel('Samples')
-    axes[2].set_ylabel('Log2 Count')
-
-    # Create the output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-    print(f"Output directory created: {output_dir}")
-
-    # Save the plots to files in the output directory
-    output_file = os.path.join(output_dir, 'boxplots.png')
-    fig.savefig(output_file)
-    print(f"Plot saved to: {output_file}")
-
-    # Tight layout for better spacing
-    plt.tight_layout()
-
-    # Remove plt.show() to prevent opening an external window
-    # plt.show()
-    
-
 if __name__=="__main__":
     print("starting")
     raw_counts=np.loadtxt(sys.argv[1])
